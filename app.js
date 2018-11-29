@@ -4,6 +4,7 @@ const serve = require('koa-static');
 const path = require('path');
 const render = require('koa-swig');
 const co = require('co');
+const fetch = require('node-fetch');
 
 const app = new Koa();
 
@@ -29,7 +30,10 @@ app.use(router(_ => {
     ctx.body = 'koa2'
   })
   _.get('/index', async(ctx, next) => {
-    ctx.body = await ctx.render('index')
+    // ctx.body = await ctx.render('index')
+    fetch('http://localhost:8080/index.php?r=book')
+    .then(res => res.json())
+    .then(json => console.log(json));
   })
 }));
 
