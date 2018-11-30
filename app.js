@@ -17,10 +17,6 @@ app.context.render = co.wrap(render({
   autoescape: true,
   cache: 'memory', // disable, set to false
   ext: 'html',
-  // locals: locals,
-  // filters: filters,
-  // tags: tags,
-  // extensions: extensions,
   writeBody: false
 }));
 
@@ -29,13 +25,51 @@ app.use(router(_ => {
   _.get('/', (ctx, next) => {
     ctx.body = 'koa2'
   })
-  _.get('/index', async(ctx, next) => {
-    // ctx.body = await ctx.render('index')
-    fetch('http://localhost:8080/index.php?r=book')
-    .then(res => res.json())
-    .then(json => console.log(json));
-  })
+  _.get('/index', list)
+  _.post('/delete/:id', remove)
+  _.post('/create', create)
 }));
+
+/**
+ * 新建图书
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+async function create(ctx, next) {
+  
+}
+
+/**
+ * 删除图书
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+async function remove(ctx, next) {
+  const bookId = ctx.params['id'];
+  console.log(bookId);
+  // http://localhost:8080/index.php?r=book/delete&id=11
+  let result = await fetch('')
+    .then(res => json())
+    .then(data => {
+      console.log(data);
+    });
+}
+
+/**
+ * 图书列表
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+async function list(ctx, next) {
+    let result = await fetch('http://localhost:8081/index.php?r=book')
+    .then(res => res.json())
+    .then(data => data);
+
+    ctx.body = await ctx.render('index', {
+      title: '首页',
+      books: result.dataProvider
+    });
+}
 
 // 监听端口
 app.listen(8888, () => {

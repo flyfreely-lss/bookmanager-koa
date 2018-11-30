@@ -14,22 +14,31 @@
 
   <p>
     <a href="" class="btn btn-success">新建图书</a>
-      <!-- <?= Html::a('Create Book', ['create'], ['class' => 'btn btn-success']) ?> -->
-  </p>
-
-  <!-- <?= GridView::widget([
-      'dataProvider' => $dataProvider,
-      'filterModel' => $searchModel,
-      'columns' => [
-          ['class' => 'yii\grid\SerialColumn'],
-
-          'id',
-          'name',
-          'author',
-
-          ['class' => 'yii\grid\ActionColumn'],
-      ],
-  ]); ?> -->
+	</p>
+	
+	<table class="table book_table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Id</th>
+				<th scope="col">Name</th>
+				<th scope="col">Author</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% set books = books.query %}
+			{% for book in books %}
+				<tr>
+					<th scope="row">{{ loop.index }}</th>
+					<td>{{ book.id }}</td>
+					<td>{{ book.name }}</td>
+					<td>{{ book.author }}</td>
+					<td><a class="book_remove" href="#" data-id="{{ book.id }}"><span>删除</span></a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
 </div>
 {% endblock %}
