@@ -27,7 +27,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% set books = books.query %}
+			{% set books = books %}
 			{% for book in books %}
 				<tr>
 					<th scope="row">{{ loop.index }}</th>

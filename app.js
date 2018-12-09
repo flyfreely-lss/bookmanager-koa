@@ -1,77 +1,37 @@
 const Koa = require('koa');
-const router = require('koa-simple-router');
 const serve = require('koa-static');
-const path = require('path');
 const render = require('koa-swig');
 const co = require('co');
-const fetch = require('node-fetch');
+const config = require('./config');
+const log4js = require('log4js');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = new Koa();
 
-// 静态文件
-app.use(serve(path.join(__dirname + '/public')));
+// 配置静态资源文件
+app.use(serve(config.staticDir));
 
-// 模板引擎
+// 配置模板引擎
 app.context.render = co.wrap(render({
-  root: path.join(__dirname, './views'),
+  root: config.viewDir,
   autoescape: true,
   cache: 'memory', // disable, set to false
   ext: 'html',
   writeBody: false
 }));
 
-// 路由
-app.use(router(_ => {
-  _.get('/', (ctx, next) => {
-    ctx.body = 'koa2'
-  })
-  _.get('/index', list)
-  _.post('/delete/:id', remove)
-  _.post('/create', create)
-}));
+// 记录日志 必须放在路由前面
+log4js.configure({
+  appenders: { cheese: { type: 'file', filename: './logs/book-manager.log' } },
+  categories: { default: { appenders: ['cheese'], level: 'error' } }
+});
+const logger = log4js.getLogger('cheese');
+errorHandler.error(app, logger);
 
-/**
- * 新建图书
- * @param {*} ctx 
- * @param {*} next 
- */
-async function create(ctx, next) {
-  
-}
-
-/**
- * 删除图书
- * @param {*} ctx 
- * @param {*} next 
- */
-async function remove(ctx, next) {
-  const bookId = ctx.params['id'];
-  console.log(bookId);
-  // http://localhost:8080/index.php?r=book/delete&id=11
-  let result = await fetch('')
-    .then(res => json())
-    .then(data => {
-      console.log(data);
-    });
-}
-
-/**
- * 图书列表
- * @param {*} ctx 
- * @param {*} next 
- */
-async function list(ctx, next) {
-    let result = await fetch('http://localhost:8081/index.php?r=book')
-    .then(res => res.json())
-    .then(data => data);
-
-    ctx.body = await ctx.render('index', {
-      title: '首页',
-      books: result.dataProvider
-    });
-}
+//路由
+require('./controllers')(app);
 
 // 监听端口
-app.listen(8888, () => {
+app.listen(config.port, () => {
   console.log('Server is running...');
 });
