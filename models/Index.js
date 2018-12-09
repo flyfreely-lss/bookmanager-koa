@@ -10,6 +10,14 @@ class Index {
     return safeRequest.fetch();
   }
 
+  saveBook(options) {
+    const safeRequest = new SafeRequest("/book/create");
+    return safeRequest.fetch({
+      method: 'post',
+      params: options.params
+    })
+  }
+
 }
 
 module.exports = Index;

@@ -8,7 +8,9 @@ module.exports = (app) => {
       ctx.body = 'koa2'
     })
     _.get('/index', indexController.actionIndex())
+    _.get('/create', indexController.actionCreate())
+    _.get('/saveData', indexController.actionSaveData())
     _.post('/delete/:id', indexController.actionDelete())
-    _.post('/create', indexController.actionCreate())
+    // _.post('/create', indexController.actionCreate())
   }));
 }

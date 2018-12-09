@@ -14,8 +14,15 @@ class SafeRequest {
       data: []
     }
 
-    return new Promise((resolve,reject) => {
-      fetch(this.baseUrl + this.url)
+    return new Promise((resolve, reject) => {
+      let tempFetch = fetch(this.baseUrl + this.url);
+      if (options.params) {
+        tempFetch = fetch(this.baseUrl + this.url, {
+          method: options.method,
+          body: options.params
+        });
+      }
+      tempFetch
         .then(res => res.json())
         .then(json => {
           result.data = json;
