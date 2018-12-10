@@ -5,8 +5,11 @@ const co = require('co');
 const config = require('./config');
 const log4js = require('log4js');
 const errorHandler = require('./middlewares/errorHandler');
+const bodyParser = require('koa-bodyparser'); //获取post请求参数
 
 const app = new Koa();
+// 解析post请求数据，需放在路由前
+app.use(bodyParser());
 
 // 配置静态资源文件
 app.use(serve(config.staticDir));

@@ -14,7 +14,6 @@ class IndexController {
     return async (ctx, next) => {
       const indexModel = new Index();
       let result = await indexModel.getBooks();
-
       ctx.body = await ctx.render('index', {
         title: '首页',
         books: result.data
@@ -39,10 +38,11 @@ class IndexController {
   actionSaveData() {
     return async (ctx, next) => {
       const indexModel = new Index();
-      //TODO 取到前端发来的数据
       const params = new URLSearchParams();
-      params.append("Book[name]", "测试数据");
-      params.append("Book[author]", "测试作者");
+      //取到前端发来的数据
+      const book = ctx.request.body;
+      params.append("Book[name]", book.bookName);
+      params.append("Book[author]", book.bookAuthor);
       //调用model保存
       const result = await indexModel.saveBook({ params });
       //返回结果
@@ -55,14 +55,14 @@ class IndexController {
    */
   actionDelete() {
     return async (ctx, next) => {
+      const indexModel = new Index();
+      // 取到前端发来的数据
       const bookId = ctx.params['id'];
       console.log(bookId);
-      // http://localhost:8080/index.php?r=book/delete&id=11
-      let result = await fetch('')
-        .then(res => json())
-        .then(data => {
-          console.log(data);
-        });
+      // 调用model删除
+      const result = await indexModel.deleteBook(bookId)
+      // 返回结果
+      ctx.body = result;
     }
   }
 
