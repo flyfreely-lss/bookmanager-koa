@@ -4,19 +4,19 @@
 
 {% block head %}
 <link rel="stylesheet" href="styles/index.css">
+<script src="scripts/x-tag-core.js"></script>
 <script src="scripts/index.js"></script>
 {% endblock %}
 
 {% block content %}
 <div class="book-index">
-
   <h1>Books</h1>
-
+	<x-clock></x-clock>
   <p>
     <a href="/create" class="btn btn-success">新建图书</a>
 	</p>
-	
-	<table class="table book_table">
+	<x-books></x-books>
+	<!-- <table class="table book_table">
 		<thead>
 			<tr>
 				<th scope="col">#</th>
@@ -30,7 +30,7 @@
 			{% set books = books %}
 			{% for book in books %}
 				<tr>
-					<th scope="row">{{ loop.index }}</th>
+					<td scope="row">{{ loop.index }}</td>
 					<td>{{ book.id }}</td>
 					<td>{{ book.name }}</td>
 					<td>{{ book.author }}</td>
@@ -38,7 +38,7 @@
 				</tr>
 			{% endfor %}
 		</tbody>
-	</table>
+	</table> -->
 
 </div>
 {% endblock %}

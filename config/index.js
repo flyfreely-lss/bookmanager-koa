@@ -8,7 +8,7 @@ let config = {
 
 if (process.env.NODE_ENV === "development") {
   const localConfig = {
-    baseUrl: "http://localhost:8080/index.php?r=",
+    baseUrl: "http://localhost:8081/index.php?r=",
     port: 8888
   }
   config = _.extend(config, localConfig);
